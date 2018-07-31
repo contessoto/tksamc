@@ -1,0 +1,13 @@
+numpy
+scipy
+subprocess
+os
+argparse
+time
+matplotlib
+itertools
+profile
+threading
+
+Surface Racer© (Tsodikov, O. V., Record, M. T. Jr. and Sergeev, Y. V. (2002). A novel computer program for fast exact calculation of accessible and molecular surface areas and average surface curvature. J. Comput. Chem., 23, 600-609.)
+http://pharmacy.uky.edu/research-innovation-and-discovery/faculty-labs/tsodikov-laboratory/software

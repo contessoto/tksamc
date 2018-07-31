@@ -1,0 +1,10 @@
+######## PULO DO GATO ##########
+Version 1.0
+
+Roda o TKSA para o método exato
+
+./pulo_do_gato.py -f arq.pdb
+
+Use "./pulo_do_gato -h" para ajuda
+
+Tem que instalar algumas bibliotecas 
