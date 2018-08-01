@@ -1,3 +1,5 @@
+![](./aux/TKSA-MC.jpg)
+
 Tanford-Kirkwood Surface Accessibility - Monte Carlo (TKSA-MC)
 
 ./tksamc.py -h
