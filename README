@@ -1,10 +1,9 @@
-######## PULO DO GATO ##########
-Version 1.0
+Tanford-Kirkwood Surface Accessibility - Monte Carlo (TKSA-MC)
 
-Roda o TKSA para o método exato
+./tksamc.py -h
 
-./pulo_do_gato.py -f arq.pdb
+The TKSAMC is a web server which calculates protein charge-charge interactions via the Tanford-Kirkwood Surface Accessibility model with the Monte Carlo method for sampling different protein protonation states. 
 
-Use "./pulo_do_gato -h" para ajuda
+The web server is freely available at UNESP (São Paulo State University - DF/IBILCE): http://tksamc.df.ibilce.unesp.br.
 
-Tem que instalar algumas bibliotecas 
+"TKSA-MC: A Web Server for rational mutation through the optimization of protein charge interactions - Vinícius G Contessoto, Vinícius M de Oliveira, Bruno R Fernandes, Gabriel GSlade, Vitor B. P. Leite, bioRxiv 221556; doi: https://doi.org/10.1101/221556"
