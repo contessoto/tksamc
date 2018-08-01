@@ -27,11 +27,11 @@ using namespace Legendre ;
 #define R 8.314
 //#define T  300.0
 //#define PH  5.5
-#define eo  8.8541878176*pow(10,-12) // Para Angstron
+#define eo  8.8541878176*pow(10,-12)
 #define e 1.602*pow(10,-19)
 #define x 0.1
 
-float aleatorio (int a,int b) // esse nome tb
+float aleatorio (int a,int b)
 {
 float r;
  r =  (a - b)*(rand()/(RAND_MAX + 1.0)) + b;
@@ -69,7 +69,7 @@ for (int i = 1; i <=m-2; i++){
   
 n=m-2;
 
-convert = 0.0083145*T; // Fator que transforma a energia de KT para kJ/mol
+convert = 0.0083145*T;
 
 srand(time(NULL));
 
@@ -99,13 +99,12 @@ for (passos_des=1;passos_des<=descorrela;passos_des++)
   Eold = 0.0;
   DeltaE = 0.0;
   parte2 = 0.0;
-  Mudadas = 1;//int(0.05*n); // Numero de cargas que serao mudadas por passos de MC
-//  Mudadas = 1;
+  Mudadas = 1;//int(0.05*n);
 
   for (a=1;a<=n;a++)
   { 
-    imonom[a] = 0.0;         //Zerando vetor
-    cargaN[a] = cargaMon[a]; //atribuindo os valores de carga ao vetor cargaN
+    imonom[a] = 0.0;         
+    cargaN[a] = cargaMon[a]; 
   } 
 
   for (k=1;k<=Mudadas;k++)
@@ -119,9 +118,7 @@ for (passos_des=1;passos_des<=descorrela;passos_des++)
         {
           goto REFAZ;
         }
-      }
-      
-    // Calcular a energia do monomero escolhido com todos os outros antes de mudar a carga    
+      }    
 
     for (a=1;a<=n;a++)
       {
@@ -130,7 +127,7 @@ for (passos_des=1;passos_des<=descorrela;passos_des++)
             Eold = Eold + 0.0005*Eij[AUX_MON][a]*cargaMon[AUX_MON]*cargaMon[a];
           }
        }
-    // Muda a carga dos monomeros escolhidos aleatoriamente e calcula termo 2 da energia
+ 
 
     if (Eij[AUX_MON][0] == 0)
       { 
@@ -157,8 +154,8 @@ for (passos_des=1;passos_des<=descorrela;passos_des++)
             cargaN[AUX_MON] = cargaMon[AUX_MON] + 1;
             parte2 = parte2 + (PH - Eij[AUX_MON][m]);
           }
-      } // Termina de mudar a carga
-    } // Fim do loop de residuos mudados
+      }
+    }
 
  for (k=1;k<=Mudadas;k++)
  {  
@@ -167,18 +164,15 @@ for (passos_des=1;passos_des<=descorrela;passos_des++)
       {    
         if (a!=AUX_MON)
         {
-          Enew = Enew + 0.0005*Eij[AUX_MON][a]*cargaN[AUX_MON]*cargaN[a]; // calcula a energia com a carga nova do monomero
+          Enew = Enew + 0.0005*Eij[AUX_MON][a]*cargaN[AUX_MON]*cargaN[a];
         }
       }
   }
 
-     // printar energias a cada passo =)
-
-     
-     //cout << Eold << " " << Enew << endl;
-     DeltaE = (Enew - Eold); // /(6.02*pow(10,23));
-     //cout << DeltaE << " " << parte2*log(10)*K*T << endl;     
-     DeltaE = DeltaE + parte2*log(10); //*K*T;   
+   
+     DeltaE = (Enew - Eold);
+        
+     DeltaE = DeltaE + parte2*log(10);
 
      if (DeltaE <= 0.0)
        {
@@ -199,7 +193,7 @@ for (passos_des=1;passos_des<=descorrela;passos_des++)
          cont=cont+1;
        }
 
-   } //passos descorrelacionam
+   }
 
      if (passos >= Pequilib){
 
@@ -208,12 +202,9 @@ for (passos_des=1;passos_des<=descorrela;passos_des++)
       ET1 = 0.0;
       for (k=1;k<=n;k++)
       {
-       //Etotal[a] = Etotal[a] + 0.5*Eij[a][k]*cargaMon[a]*cargaMon[k];
-       //EtotalQuadrado[a] = EtotalQuadrado[a] + pow(0.5*Eij[a][k]*cargaMon[a]*cargaMon[k],2.0);
-       //cout << Etotal[a] << " " << EtotalQuadrado[a] << endl;
+      
        ET1 = ET1 + 0.0005*Eij[a][k]*cargaMon[a]*cargaMon[k];
-       //cout << ET1 << " " << cargaMon[a] << " " << cargaMon[k] << " " << Eij[a][k] << endl;
-      // ET2 = ET2 + pow(0.5*Eij[a][k]*cargaMon[a]*cargaMon[k],2.0);
+       
       }
       ionMedio[a] = ionMedio[a] + cargaMon[a];
       ionQuadrado[a] = ionQuadrado[a] + pow(cargaMon[a],2.0);
@@ -221,9 +212,8 @@ for (passos_des=1;passos_des<=descorrela;passos_des++)
       EtotalQuadrado[a] = EtotalQuadrado[a] + pow(ET1,2.0);
      }
      }
-  //     cout << ET1 << endl;
   
-   } // Fecha o numero de passos
+   } 
     
    
      SomaEnergia = 0.0;
@@ -238,11 +228,10 @@ for (passos_des=1;passos_des<=descorrela;passos_des++)
          ionM = ionMedio[k]/(totalp-Pequilib);
          ionDesvio[k] = sqrt(ionQ - pow(ionM,2.0));
 
-         //cout << k << " " << convert*dg << " +/- " << convert*Edesvio[k] << " Alpha " << ionM << " +/- " << ionDesvio[k] << endl;
          out_data << convert*dg/5.0 << endl;
 	 SomaEnergia = SomaEnergia + Etotal[k]/(totalp-Pequilib);
         }  
   
-} // fim do programa
+}
 
 
