@@ -1,6 +1,6 @@
 // ##########################################################
 // #
-// #   		Vinícius Contessoto - 12/2016
+// #   		Vinícius Contessoto - 12/2014
 // #
 // ##########################################################
 
@@ -21,11 +21,11 @@ using namespace Legendre ;
 #define PI 3.14159265359
 #define ep 4.0
 #define es 78.5
-#define K  1.3806488 ///*pow(10,-23)
+#define K  1.3806488
 #define R 8.314
-#define eo  8.8541878176 ///*pow(10,-12) // Para Angstron
-#define e 1.602 ///*pow(10,-19)
-#define x 0.1 ///1.0
+#define eo  8.8541878176
+#define e 1.602
+#define x 1.0
 
 
 int main (int argc, char *argv[]) {
@@ -64,13 +64,13 @@ n=m-2;
 	    i=0;
 	    kk=jj;
 	   	 
-	for(j=0;j<=n;j++) // calcula Energia por partícula
+	for(j=0;j<=n;j++)
                 {
                         X[j]=0.0;
                 }
 
 
-	   while(kk>0) // convertendo para binário => economiza um laço
+	   while(kk>0)
 	    { 
 	    X[i]=kk%2; 
 	    i++; 
@@ -82,7 +82,7 @@ n=m-2;
      for(a=1;a<=n;a++) 
       {
 	  termo2 = 0.0;
-	  termo1 = (Eij[a][m])*(Eij[a][0] + X[a-1]); // residuo a => o estado do resíduo 1 é a posição ZERO
+	  termo1 = (Eij[a][m])*(Eij[a][0] + X[a-1]);
    
    	for(k=1;k<=n;k++)
 	  {
@@ -93,7 +93,7 @@ n=m-2;
 	  Gn = Gn -termo1*(log(10))*R*T + termo2;
 	  Gu = Gu -termo1*(log(10))*R*T;
 	
-	  vi = vi + X[a-1]; // a-1 por causa do deslocamento ods resíduos no vetor
+	  vi = vi + X[a-1];
 	
       }
 	
@@ -107,14 +107,14 @@ n=m-2;
    G2 = GC = 0.0;   
    
    
-   for(b=1;b<=n;b++) // calcula Energia por partícula
+   for(b=1;b<=n;b++)
       {
 	Wqq = 0.0;  
 	
-   for(jj=1;jj<=states;jj++) // densidade de estados
+   for(jj=1;jj<=states;jj++)
       {
 	  termo1 = Gn = Gu = vi = 0.0;
-		for(j=0;j<=n;j++) // calcula Energia por partícula
+		for(j=0;j<=n;j++)
       		{
 			X[j]=0.0;
 		}
@@ -122,9 +122,9 @@ n=m-2;
 	    i=0;
             kk=jj;
 
-	   while(kk>0) // convertendo para binário => economiza um laço
+	   while(kk>0)
       	      {
-            X[i]=kk%2; // Tirando o vetor de tudo, mais lento mas não ocupa mem ram
+            X[i]=kk%2;
             i++;
             kk=kk/2;
 
@@ -141,7 +141,7 @@ for(a=1;a<=n;a++)
                   Gn = Gn -termo1*(log(10))*R*T + termo2;
 	  vi = vi + X[a-1];
 	}	
-	  GC = (exp( -(Gn)/(R*T)  -  vi*(log(10))*PH))/Zn ;// densidade de estado Ro de n
+	  GC = (exp( -(Gn)/(R*T)  -  vi*(log(10))*PH))/Zn ;
 	  termo2 = 0.0;
 	
 	for(k=1;k<=n;k++)
@@ -151,13 +151,13 @@ for(a=1;a<=n;a++)
 
 	Wqq = Wqq + termo2*GC;
 	
-      } // fecha estados
+      }
    
      Gqq[b] = 0.5*Wqq;
      out_data << Gqq[b]/1000.0 << endl;
      G2 = G2 + Gqq[b];  
       }
-} // fim do programa
+}
 
 
 
