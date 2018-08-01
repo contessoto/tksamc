@@ -42,7 +42,7 @@ parser.add_argument('-ph', action='store', default=7.0, dest='arg_pH', help='pH 
 parser.add_argument('-T', action='store', default=300.0, dest='arg_T',  help='Temperature value')           
 parser.add_argument('-f', metavar='input-file-PDB',help='insert a PDB file',type=argparse.FileType('rt'))
 parser.add_argument('-e', action='store',choices=['TK'], default="TK",dest='arg_e',type=str,help='Electrostatic energy calculation method')
-parser.add_argument('-s', action='store',choices=['EX','MC'], default="EX",dest='arg_s',type=str,help='Statistical method to protonation state amostration - EX = Exact; MC = Monte Carlo;')
+parser.add_argument('-s', action='store',choices=['EX','MC'], default="MC",dest='arg_s',type=str,help='Statistical method to protonation state amostration - EX = Exact; MC = Monte Carlo;')
 parser.add_argument('-plot', action='store',choices=['yes','no'], default="yes",dest='arg_plot',type=str,help='Save Plot figure file - EPS')
 
 try:
