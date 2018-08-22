@@ -10,4 +10,5 @@ Example:
 python tksamc.py -f sample_pdb_1ubq.pdb -ph 7.0 -T 300.0
 ```
 
->"TKSA-MC: A Web Server for rational mutation through the optimization of protein charge interactions - Vinícius G Contessoto, Vinícius M de Oliveira, Bruno R Fernandes, Gabriel GSlade, Vitor B. P. Leite, bioRxiv 221556; doi: https://doi.org/10.1101/221556"
+>"TKSA-MC: A Web Server for rational mutation through the optimization of protein charge interactions 
+Vinícius G Contessoto, Vinícius M de Oliveira, Bruno R Fernandes, Gabriel GSlade, Vitor B. P. Leite, bioRxiv 221556; doi: https://doi.org/10.1101/221556"
