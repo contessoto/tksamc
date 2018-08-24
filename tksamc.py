@@ -309,9 +309,11 @@ def main():
       ax.bar(x_pos, plot_data,width=width,color=colors,linewidth=2)
       ax.tick_params('both', length=5, width=2, which='major',labelsize=13)   
       plt.setp(ax.spines.values(), linewidth=2)
-      if np.size(total_charged_residues)>25:
-        plt.xticks(x_pos+width/2.0,Restype,rotation=90,fontsize=10)
-      else:
+      if np.size(total_charged_residues)>35:
+        plt.xticks(x_pos+width/2.0,Restype,rotation=90,fontsize=8)
+      elif np.size(total_charged_residues) >= 15 and np.size(total_charged_residues) <= 35:
+        plt.xticks(x_pos+width/2.0,Restype,rotation=90,fontsize=12)
+      else: 
         plt.xticks(x_pos+width/2.0,Restype,rotation=90,fontsize=15)
       plt.xlim([0,np.size(x_pos)])
       plt.ylabel(r'$\Delta G_{qq}$(kJ/mol)',fontsize=20)
