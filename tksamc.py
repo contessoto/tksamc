@@ -160,8 +160,8 @@ def main():
     NormA = np.matrix([LA.norm(v) for v in np.array(XYZ)])
     rirj = np.array(np.dot(np.transpose(NormA),NormA))
     A = np.divide(raio[1],e[0]*dist)
-    B = (np.nansum(np.array([((e[1]-e[0])/(e[1]-(n*e[0])/(n+1)))*(np.power((rirj/(raio[1]*raio[1])),n))*(eval_legendre(n, np.cos(theta))) for n in range(0,50)]),axis=0))/(e[0]) 
-    C = (np.divide(e[2],1+e[2]) + np.power(e[2],2)*np.sum(np.array([np.divide(np.divide(2*n+1,2*n-1)*np.divide(e[1],(n+1)*e[1]+n*e[0])*(np.power((rirj/(raio[0]*raio[0])),n))*(eval_legendre(n, np.cos(theta))),np.divide(Kn(n+1,e[2]),Kn(n-1,e[2])) + np.divide(n*(e[1]-e[0]),(n+1)*e[1]+n*e[0])*np.divide(np.power(e[2],2),4.0*np.power(n,2)-1)*np.power(np.divide(raio[1],raio[0]),2*n+1)) for n in range(1,50)]),axis=0))/(e[1])
+    B = (np.nansum(np.array([((e[1]-e[0])/(e[1]-(n*e[0])/(n+1)))*(np.power((rirj/(raio[1]*raio[1])),n))*(eval_legendre(n, np.cos(theta))) for n in range(0,60)]),axis=0))/(e[0]) 
+    C = (np.divide(e[2],1+e[2]) + np.power(e[2],2)*np.sum(np.array([np.divide(np.divide(2*n+1,2*n-1)*np.divide(e[1],(n+1)*e[1]+n*e[0])*(np.power((rirj/(raio[0]*raio[0])),n))*(eval_legendre(n, np.cos(theta))),np.divide(Kn(n+1,e[2]),Kn(n-1,e[2])) + np.divide(n*(e[1]-e[0]),(n+1)*e[1]+n*e[0])*np.divide(np.power(e[2],2),4.0*np.power(n,2)-1)*np.power(np.divide(raio[1],raio[0]),2*n+1)) for n in range(1,60)]),axis=0))/(e[1])
     Qe = np.divide(e[3]*e[4]*e[4]*np.power(10,7),4*np.pi*e[5])
     SAij = distance.cdist(zip(SA), zip(SA), lambda u,v: (u+v)*0.5)
     E = Qe*(np.divide(A-B,2*raio[1])-np.divide(C,2*raio[0]))*(1-SAij)
@@ -309,7 +309,10 @@ def main():
       ax.bar(x_pos, plot_data,width=width,color=colors,linewidth=2)
       ax.tick_params('both', length=5, width=2, which='major',labelsize=13)   
       plt.setp(ax.spines.values(), linewidth=2)
-      plt.xticks(x_pos+width/2.0,Restype,rotation=90,fontsize=15)
+      if np.size(total_charged_residues)>25:
+        plt.xticks(x_pos+width/2.0,Restype,rotation=90,fontsize=10)
+      else:
+        plt.xticks(x_pos+width/2.0,Restype,rotation=90,fontsize=15)
       plt.xlim([0,np.size(x_pos)])
       plt.ylabel(r'$\Delta G_{qq}$(kJ/mol)',fontsize=20)
       plt.show()
