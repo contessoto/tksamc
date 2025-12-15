@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#coding: utf8 
+#coding: utf8
 
 __description__ = \
 """
@@ -14,8 +14,8 @@ __date__ = "21/12/2016"
 # Version 1.0 (Python 3 Port)
 #
 # python tksamc.py -h # for help
-# 
-# The following programs are provided free of charge only for academic use. 
+#
+# The following programs are provided free of charge only for academic use.
 # By downloading these programs you implicitly agree that they will be used exclusively in academic research.
 #
 ################################################################
@@ -37,13 +37,13 @@ from subprocess import call
 import profile
 import threading
 import mdtraj as md
-import tksa_solver
+from . import solver
 import math
 from scipy.special import eval_legendre
 
 parser = argparse.ArgumentParser(description='Charge-charge energy calculation in python')
-parser.add_argument('-ph', action='store', default=7.0, dest='arg_pH', help='pH value')              
-parser.add_argument('-T', action='store', default=300.0, dest='arg_T',  help='Temperature value')           
+parser.add_argument('-ph', action='store', default=7.0, dest='arg_pH', help='pH value')
+parser.add_argument('-T', action='store', default=300.0, dest='arg_T',  help='Temperature value')
 parser.add_argument('-f', metavar='input-file-PDB',help='insert a PDB file',type=argparse.FileType('rt'))
 parser.add_argument('-e', action='store',choices=['TK'], default="TK",dest='arg_e',type=str,help='Electrostatic energy calculation method')
 parser.add_argument('-s', action='store',choices=['EX','MC'], default="MC",dest='arg_s',type=str,help='Statistical method to protonation state amostration - EX = Exact; MC = Monte Carlo;')
@@ -86,7 +86,7 @@ def main():
    file_pdb_name = arguments.f.name
    pH = np.float64(arguments.arg_pH)
    T = np.float64(arguments.arg_T)
-   
+
    ##################################################################################################
    # SASA Calculation using MDTraj
    ##################################################################################################
@@ -227,7 +227,7 @@ def main():
                      PKA[Charged_residues.index('C_TER')], sasa_val, Charge_values[Charged_residues.index('C_TER')]])
 
    print("There are: %d Charged_residues" % len(total_charged_residues))
-   
+
    if not S:
        print("No charged residues found. Check PDB format (Chain A, standard residues).")
        sys.exit(0)
@@ -253,9 +253,9 @@ def main():
    Z = Z - np.mean(Z)
    XYZ = list(zip(X,Y,Z))
    Origin = np.zeros(np.shape(XYZ))
-   
+
    dist = distance.cdist(XYZ, XYZ, 'euclidean')
-   
+
    # TK Calculation
    if arguments.arg_e == 'TK':
         dist_origin = distance.cdist(XYZ, Origin, 'euclidean')
@@ -334,12 +334,12 @@ def main():
 
    # Solving
    plot_data = []
-   
+
    if arguments.arg_s == 'EX':
        print(u"\U0001F63A", "### TK - Exact ###", u"\U0001F63A")
        start = time.time()
 
-       Gqq_result = tksa_solver.solve_exact(E, Q, Pk, pH, T)
+       Gqq_result = solver.solve_exact(E, Q, Pk, pH, T)
 
        # Convert to kJ/mol? C code did: Gqq[b]/1000.0
        # My solve_exact returns Energy in Joules/mol (because terms are in RT).
@@ -361,7 +361,7 @@ def main():
        print(u"\U0001F63A", "### TKSA - MC ###", u"\U0001F63A")
        start = time.time()
 
-       G_result = tksa_solver.solve_mc(E, Q, Pk, pH, T)
+       G_result = solver.solve_mc(E, Q, Pk, pH, T)
 
        plot_data = G_result # Already formatted by solve_mc to match C output logic
 
@@ -394,30 +394,36 @@ def main():
 
        # Plot
        x_pos = np.arange(len(plot_data))
-       fig = plt.figure()
+       fig = plt.figure(figsize=(10, 6)) # Improved size
        ax = fig.add_subplot(111)
        width=1.0
        colors = []
        for position, value in enumerate(plot_data):
            if value > 0:
-               colors.append('r')
+               colors.append('red')
            else:
-               colors.append('b')
+               colors.append('blue')
 
-       ax.bar(x_pos, plot_data, width=width, color=colors, linewidth=2)
-       ax.tick_params('both', length=5, width=2, which='major', labelsize=13)
-       plt.setp(ax.spines.values(), linewidth=2)
+       # Improved bar aesthetics
+       ax.bar(x_pos, plot_data, width=width, color=colors, edgecolor='black', linewidth=0.5)
+
+       ax.tick_params('both', length=5, width=2, which='major', labelsize=12)
+       plt.setp(ax.spines.values(), linewidth=1.5)
 
        # Adjust x-ticks based on size
-       fontsize = 15
+       fontsize = 12
        if len(plot_data) > 35:
            fontsize = 8
-       elif len(plot_data) >= 15:
-           fontsize = 12
 
-       plt.xticks(x_pos+width/2.0, labels, rotation=90, fontsize=fontsize)
-       plt.xlim([0, len(x_pos)])
-       plt.ylabel(r'$\Delta G_{qq}$(kJ/mol)', fontsize=20)
+       # Labels and Title
+       plt.xlabel('Residue', fontsize=14)
+       plt.ylabel(r'$\Delta G_{qq}$ (kJ/mol)', fontsize=14)
+       plt.title(f'Electrostatic Free Energy per Residue\n{os.path.basename(file_pdb_name)}', fontsize=14)
+
+       plt.xticks(x_pos, labels, rotation=90, fontsize=fontsize)
+       plt.xlim([-0.5, len(x_pos)-0.5])
+
+       plt.tight_layout()
 
        fig_filename = 'Fig_'+arguments.arg_s+'_'+ os.path.splitext(os.path.basename(file_pdb_name))[0]+'_pH_'+str(pH)+'_T_'+str(T)+'.jpg'
        fig.savefig(fig_filename, dpi=300)
@@ -447,7 +453,7 @@ def main():
    # We are not generating .exe or result.txt.
    # We generated E.dat.
    # We generated Output_... .dat and Fig_... .jpg.
-   
+
    print(u"\U0001F63A", "### Finished ###", u"\U0001F63A")
 
 if __name__ == "__main__":
