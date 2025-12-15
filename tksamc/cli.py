@@ -41,14 +41,6 @@ from . import solver
 import math
 from scipy.special import eval_legendre
 
-parser = argparse.ArgumentParser(description='Charge-charge energy calculation in python')
-parser.add_argument('-ph', action='store', default=7.0, dest='arg_pH', help='pH value')
-parser.add_argument('-T', action='store', default=300.0, dest='arg_T',  help='Temperature value')
-parser.add_argument('-f', metavar='input-file-PDB',help='insert a PDB file',type=argparse.FileType('rt'))
-parser.add_argument('-e', action='store',choices=['TK'], default="TK",dest='arg_e',type=str,help='Electrostatic energy calculation method')
-parser.add_argument('-s', action='store',choices=['EX','MC'], default="MC",dest='arg_s',type=str,help='Statistical method to protonation state amostration - EX = Exact; MC = Monte Carlo;')
-parser.add_argument('-plot', action='store',choices=['yes','no'], default="yes",dest='arg_plot',type=str,help='Save Plot figure file - EPS')
-
 # Constants
 All_residues = ['ALA','CYS','ASP','GLU','PHE','GLY','HIS','ILE','LYS','LEU','MET','ASN','PRO','GLN','ARG','SER','THR','VAL','TRP','TYR']
 Area_residues = [113,140,151,183,218,85,194,182,211,180,204,158,143,189,241,122,146,160,259,229] # Reference values for Max SASA
@@ -68,6 +60,14 @@ def Kn(n,x):
 
 def main():
    global Q,E,S,Pk,e,T,pH,total_charged_residues,G,G0,indiv_data,Gqq,Q0
+
+   parser = argparse.ArgumentParser(description='Charge-charge energy calculation in python')
+   parser.add_argument('-ph', action='store', default=7.0, dest='arg_pH', help='pH value')
+   parser.add_argument('-T', action='store', default=300.0, dest='arg_T',  help='Temperature value')
+   parser.add_argument('-f', metavar='input-file-PDB',help='insert a PDB file',type=argparse.FileType('rt'))
+   parser.add_argument('-e', action='store',choices=['TK'], default="TK",dest='arg_e',type=str,help='Electrostatic energy calculation method')
+   parser.add_argument('-s', action='store',choices=['EX','MC'], default="MC",dest='arg_s',type=str,help='Statistical method to protonation state amostration - EX = Exact; MC = Monte Carlo;')
+   parser.add_argument('-plot', action='store',choices=['yes','no'], default="yes",dest='arg_plot',type=str,help='Save Plot figure file - EPS')
 
    try:
        arguments = parser.parse_args()
