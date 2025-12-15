@@ -3,6 +3,7 @@ import math
 import random
 import time
 import sys
+from numba import jit
 
 # Constants
 PI = 3.14159265359
@@ -131,30 +132,28 @@ def solve_exact(Eij, charges, pkas, pH, T):
 
     return Gqq
 
-def solve_mc(Eij, charges, pkas, pH, T, steps=100000, equil_steps=1000):
+@jit(nopython=True)
+def _solve_mc_jit(Eij, charges, pkas, pH, T, steps, equil_steps):
     """
-    Monte Carlo solution for TKSA.
+    JIT-compiled Monte Carlo loop.
     """
     n = len(charges)
     # Replicating C code behavior exactly, including constants.
 
-    # C code: convert = 0.0083145*T
-    convert = 0.0083145 * T
-
     current_charges = np.zeros(n, dtype=np.float64)
 
     # Accumulators
-    E_total = np.zeros(n)
-    E_total_sq = np.zeros(n)
+    E_total = np.zeros(n, dtype=np.float64)
+    E_total_sq = np.zeros(n, dtype=np.float64)
 
-    rng = np.random.default_rng()
-    LN10 = np.log(10)
+    # rng = np.random.default_rng() # Numba supports simple random functions
+    LN10 = np.log(10.0)
 
     descorrela = 200
 
     for step in range(steps):
         for _ in range(descorrela):
-            res_idx = rng.integers(0, n)
+            res_idx = random.randint(0, n-1)
 
             old_q = current_charges[res_idx]
             new_q = 0.0
@@ -184,6 +183,7 @@ def solve_mc(Eij, charges, pkas, pH, T, steps=100000, equil_steps=1000):
             # DeltaE = (Enew - Eold) + parte2*log(10)
             # Enew - Eold = 0.0005 * (new_q - old_q) * Sum(E_ij * q_j)
 
+            # Using loop for dot product to be safe with numba in older versions, but dot is supported
             interaction_sum = np.dot(Eij[res_idx, :], current_charges) - Eij[res_idx, res_idx]*current_charges[res_idx]
             delta_interaction = (new_q - old_q) * interaction_sum * 0.0005
 
@@ -193,7 +193,7 @@ def solve_mc(Eij, charges, pkas, pH, T, steps=100000, equil_steps=1000):
             if delta_E <= 0:
                 accept = True
             else:
-                if np.exp(-delta_E) > rng.random():
+                if np.exp(-delta_E) > random.random():
                     accept = True
 
             if accept:
@@ -206,6 +206,10 @@ def solve_mc(Eij, charges, pkas, pH, T, steps=100000, equil_steps=1000):
 
             # Calculate vector of interactions
             # (n,) vector
+            # Dot product Eij * current_charges -> vector
+            # Then elementwise multiply by current_charges * 0.0005
+
+            # np.dot(Eij, current_charges) returns vector of size n
             E_interaction_all = 0.0005 * current_charges * (np.dot(Eij, current_charges))
 
             E_total += E_interaction_all
@@ -214,7 +218,13 @@ def solve_mc(Eij, charges, pkas, pH, T, steps=100000, equil_steps=1000):
     count = steps - equil_steps
     avg_E = E_total / count
 
-    # C code output: convert * dg / 5.0
-    G_res = avg_E * convert / 5.0
+    return avg_E
 
+def solve_mc(Eij, charges, pkas, pH, T, steps=100000, equil_steps=1000):
+    """
+    Monte Carlo solution wrapper.
+    """
+    convert = 0.0083145 * T
+    avg_E = _solve_mc_jit(Eij, charges, pkas, pH, T, steps, equil_steps)
+    G_res = avg_E * convert / 5.0
     return G_res
