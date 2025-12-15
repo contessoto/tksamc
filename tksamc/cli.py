@@ -399,7 +399,7 @@ def main():
        width=1.0
        colors = []
        for position, value in enumerate(plot_data):
-           if value > 0:
+           if value > 0 and SA[position] > 0.5:
                colors.append('red')
            else:
                colors.append('blue')
