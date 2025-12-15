@@ -95,35 +95,19 @@ def solve_exact(Eij, charges, pkas, pH, T):
         Term3 = vi * ln10pH
 
         # Boltzmann factors
-        exp_factor_n = np.exp((-Gn - Term3)/RT)
-        # Note: C code `exp( -(Gn)/(R*T) - termo3)`.
-        # My Term3 is already `vi * ln10 * pH`. In C code `termo3 = vi * log(10) * PH`.
-        # `(Gn)/RT` is `Gn/RT`.
-        # Wait. `Gn` in C code ALREADY has RT units?
-        # `Gn = Gn -termo1*(log(10))*R*T + termo2`.
-        # `termo2` is Energy?
-        # `termo1*ln10*RT` is Energy.
-        # So Gn is Energy.
-        # `exp( -Gn/RT - termo3 )`.
-        # `termo3` is dimensionless? `vi * log(10) * PH`.
-        # Correct. `log(10)*pH` is related to chemical potential in RT units.
-        # `mu = 2.3 RT pH`.
-        # So `termo3` should be `vi * 2.3 * pH` (dimensionless part of exponent) or `vi * 2.3 * RT * pH` (energy)?
-        # C code: `termo3 = vi*(log(10))*PH`.
-        # And `exp( -(Gn)/(R*T) - termo3 )`.
-        # This means `termo3` is treated as dimensionless.
-        # So it is `vi * ln10 * pH`.
-        # Checks out.
+        # The C code uses: exp( -(Gn)/(R*T) - termo3 )
+        # Gn is energy (J/mol). RT is energy (J/mol). Gn/RT is dimensionless.
+        # termo3 (vi*ln10*pH) is dimensionless.
+        # So correct expression is exp( -Gn/RT - Term3 ).
+
+        exp_factor_n = np.exp(-Gn/RT - Term3)
 
         sum_Zn += np.sum(exp_factor_n)
 
         # Zu calculation
         # C code: `Zu = Zu + exp( -(Gu)/(R*T) - termo3);`
-        # `Gu = Gu -termo1*(log(10))*R*T;`
-        # Gu is Energy.
 
-        exp_factor_u = np.exp((-Gu)/RT - Term3) # Wait, Term3 is same?
-        # Yes, `termo3` depends on `vi`.
+        exp_factor_u = np.exp(-Gu/RT - Term3)
 
         sum_Zu += np.sum(exp_factor_u)
 
@@ -143,7 +127,7 @@ def solve_exact(Eij, charges, pkas, pH, T):
 
         Gqq_num += np.sum(Interaction_energy_per_res * exp_factor_n[:, None], axis=0)
 
-    Gqq = Gqq_num / sum_Zn
+    Gqq = 0.5 * Gqq_num / sum_Zn
 
     return Gqq
 

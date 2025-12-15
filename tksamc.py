@@ -39,6 +39,7 @@ import threading
 import mdtraj as md
 import tksa_solver
 import math
+from scipy.special import eval_legendre
 
 parser = argparse.ArgumentParser(description='Charge-charge energy calculation in python')
 parser.add_argument('-ph', action='store', default=7.0, dest='arg_pH', help='pH value')              
@@ -193,32 +194,25 @@ def main():
            if n_atom:
                total_charged_residues.append(n_atom.index) # Using atom index
                # Structure of S:
-               # ['N_T', residue_index, count, atom_name, atom_type, X, Y, Z, PKA, SASA, Charge]
-               # Note: atom_name and atom_type were same in original list?
-               # Original: lista[1] (index), lista[2] (name/type).
-               # PDB columns: ATOM (0), Serial(1), Name(2), ResName(3), Chain(4), ResSeq(5), X(6), Y(7), Z(8)
-               # My parsing was: list[1]=atom_index, list[2]=atom_name.
+               # ['N_T', residue_index, count, atom_serial, atom_type, X, Y, Z, PKA, SASA, Charge]
+               # Column 4: atom_serial (was atom_name, user requested correction)
 
                pos = xyz[n_atom.index]
-               S.append(['N_T', pdb_res_index, len(total_charged_residues), n_atom.name, 'N',
+               # n_atom.serial is available in MDTraj atoms
+               S.append(['N_T', pdb_res_index, len(total_charged_residues), n_atom.serial, 'N',
                          pos[0], pos[1], pos[2],
                          PKA[Charged_residues.index('N_TER')], sasa_val, Charge_values[Charged_residues.index('N_TER')]])
 
        # Charged Side Chains
        if res_name in Charged_residues:
            # Find the charged atom
-           # Charged_atoms = ['NH2','NZ','NE2','OE2','OD2']
            target_atom_names = Charged_atoms
            target_atom = next((a for a in residue.atoms if a.name in target_atom_names), None)
-
-           # Some residues might have different atom names (e.g. OXT for C-term, but this is side chain block)
-           # If we can't find specific atom, maybe use CA or last heavy atom?
-           # Original code matched exactly `atom_type in Charged_atoms`.
 
            if target_atom:
                total_charged_residues.append(target_atom.index)
                pos = xyz[target_atom.index]
-               S.append([res_name, pdb_res_index, len(total_charged_residues), target_atom.name, target_atom.name,
+               S.append([res_name, pdb_res_index, len(total_charged_residues), target_atom.serial, target_atom.name,
                          pos[0], pos[1], pos[2],
                          PKA[Charged_residues.index(res_name)], sasa_val, Charge_values[Charged_residues.index(res_name)]])
 
@@ -228,7 +222,7 @@ def main():
        if oxt_atom and res_name not in Charged_residues:
            total_charged_residues.append(oxt_atom.index)
            pos = xyz[oxt_atom.index]
-           S.append(['C_T', pdb_res_index, len(total_charged_residues), oxt_atom.name, 'OXT',
+           S.append(['C_T', pdb_res_index, len(total_charged_residues), oxt_atom.serial, 'OXT',
                      pos[0], pos[1], pos[2],
                      PKA[Charged_residues.index('C_TER')], sasa_val, Charge_values[Charged_residues.index('C_TER')]])
 
@@ -335,10 +329,8 @@ def main():
             print("Current radius ratio b/a=", np.divide(raio[1],raio[0]))
             print('###############################################################')
 
-        # Save E.dat (for reference/debugging, though we pass arrays to solver now)
-        # We need to construct the matrix format expected if we were to save it
-        E_out = np.vstack([np.vstack([Q,E]),Pk])
-        np.savetxt('E.dat',E_out)
+        # E calculation complete
+        # No longer saving E.dat as requested
 
    # Solving
    plot_data = []
@@ -431,21 +423,22 @@ def main():
        fig.savefig(fig_filename, dpi=300)
        # plt.show() # Can't show in headless env
 
-       # Save Output Dat
+       # Save Output CSV
        # We need to construct S with added column
 
        # S is list of lists.
        for i in range(len(S)):
            S[i].append(plot_data[i])
 
-       header='1-Name	2-Residue-index	3-Position	4-Atom	5-Atom-type	6-X	7-Y	8-Z	9-PKA	10-SASA	11-Charge	12-dG_Energy 13-Total_dG= '+str(total_dG)+''
+       # Updated header with commas
+       header='1-Name,2-Residue-index,3-Position,4-Atom-Index,5-Atom-type,6-X,7-Y,8-Z,9-PKA,10-SASA,11-Charge,12-dG_Energy,13-Total_dG='+str(total_dG)+''
 
-       out_filename = 'Output_'+arguments.arg_s+'_'+os.path.splitext(os.path.basename(file_pdb_name))[0]+'_pH_'+str(pH)+'_T_'+str(T)+'.dat'
+       out_filename = 'Output_'+arguments.arg_s+'_'+os.path.splitext(os.path.basename(file_pdb_name))[0]+'_pH_'+str(pH)+'_T_'+str(T)+'.csv'
 
        with open(out_filename, 'w') as f:
            f.write('# ' + header + '\n')
            for row in S:
-               line = "\t".join(map(str, row))
+               line = ",".join(map(str, row))
                f.write(line + '\n')
 
    # Cleanup
