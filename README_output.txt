@@ -13,7 +13,7 @@ There are 13 columns in this file:
 7 - Y:              Position Y of the atom in the PDB file in Angstroms.
 8 - Z:              Position Z of the atom in the PDB file in Angstroms.
 9 - PKA:            Value of the reference PKA for each residue type.
-10 - SASA:          Normalized Solvent-Accessible Surface Area - calculated using MDTraj (Shrake-Rupley algorithm) and normalized by reference values.
+10 - SASA:          Normalized Solvent-Accessible Surface Area - calculated using MDTraj (Shrake-Rupley algorithm) and normalized by reference values. The reference max area is chosen via the -aref flag (default: header values, using legacy constants; option: mdtraj, using Tien et al. 2013 Bondi values).
 11 - Charge:        Initial charge assumed to start the algorithm.
 12 - dG_Energy:     Free energy contribution of each residue in kJ/mol.
 13 - Total_dG:      Electrostatic free energy contribution of all residues (Summation of column 12) in kJ/mol.

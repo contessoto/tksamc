@@ -43,7 +43,13 @@ from scipy.special import eval_legendre
 
 # Constants
 All_residues = ['ALA','CYS','ASP','GLU','PHE','GLY','HIS','ILE','LYS','LEU','MET','ASN','PRO','GLN','ARG','SER','THR','VAL','TRP','TYR']
-Area_residues = [113,140,151,183,218,85,194,182,211,180,204,158,143,189,241,122,146,160,259,229] # Reference values for Max SASA
+# Reference values for Max SASA (Header / Legacy)
+Area_residues = [113,140,151,183,218,85,194,182,211,180,204,158,143,189,241,122,146,160,259,229]
+
+# Reference values for Max SASA (MDTraj / Bondi - Tien et al. 2013)
+# ALA, CYS, ASP, GLU, PHE, GLY, HIS, ILE, LYS, LEU, MET, ASN, PRO, GLN, ARG, SER, THR, VAL, TRP, TYR
+Area_residues_Tien2013 = [121.0, 148.0, 187.0, 214.0, 228.0, 97.0, 216.0, 195.0, 230.0, 191.0, 203.0, 187.0, 154.0, 214.0, 265.0, 143.0, 163.0, 165.0, 264.0, 255.0]
+
 Charged_residues = ['ARG','LYS','N_TER','HIS','GLU','ASP','C_TER']
 Charge_values = [0,0,0,0,-1,-1,-1]
 Charged_atoms = ['NH2','NZ','NE2','OE2','OD2']
@@ -68,6 +74,7 @@ def main():
    parser.add_argument('-e', action='store',choices=['TK'], default="TK",dest='arg_e',type=str,help='Electrostatic energy calculation method')
    parser.add_argument('-s', action='store',choices=['EX','MC'], default="MC",dest='arg_s',type=str,help='Statistical method to protonation state amostration - EX = Exact; MC = Monte Carlo;')
    parser.add_argument('-plot', action='store',choices=['yes','no'], default="yes",dest='arg_plot',type=str,help='Save Plot figure file - EPS')
+   parser.add_argument('-aref', action='store', choices=['header', 'mdtraj'], default='header', dest='arg_aref', type=str, help='Reference Max SASA set. header=Legacy (Richards), mdtraj=Bondi (Tien 2013). Default: header')
 
    try:
        arguments = parser.parse_args()
@@ -96,10 +103,15 @@ def main():
        traj = md.load(file_pdb_name)
        # Calculate SASA
        # mode='residue' returns area per residue
-       sasa_by_residue = md.shrake_rupley(traj, mode='residue')[0] * 100.0 # Convert nm^2 to Angstrom^2?
-       # MDTraj returns nm^2. Reference Area_residues likely in Angstrom^2?
-       # Standard MaxSASA for ALA is ~113 A^2. 1.13 nm^2.
-       # So multiply by 100.
+       sasa_by_residue = md.shrake_rupley(traj, mode='residue')[0] * 100.0 # Convert nm^2 to Angstrom^2
+
+       # Select Reference Area List
+       if arguments.arg_aref == 'mdtraj':
+           print("Using MDTraj (Bondi/Tien2013) Reference Areas for Normalization.")
+           current_area_refs = Area_residues_Tien2013
+       else:
+           print("Using Header (Legacy/Richards) Reference Areas for Normalization.")
+           current_area_refs = Area_residues
 
        # Mapping MDTraj residues to the list
        SASA_data = []
@@ -111,14 +123,10 @@ def main():
            if res_name == 'CYX': res_name = 'CYS'
 
            if res_name not in All_residues:
-               # Handle non-standard residues or skip
-               # print(f"Warning: Unknown residue {res_name}")
-               # Append default or handle?
-               # For now, if not in list, maybe it's not protein?
                continue
 
            sasa_val = sasa_by_residue[i]
-           ref_area = Area_residues[All_residues.index(res_name)]
+           ref_area = current_area_refs[All_residues.index(res_name)]
            Area_norm = sasa_val / ref_area
 
            if Area_norm >= 1.0:

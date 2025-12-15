@@ -67,6 +67,7 @@ python3 -m tksamc.cli -f sample_pdb_1ubq.pdb -ph 7.0 -T 300.0 -s MC
 *   `-s`: Solver method. Choices: `EX` (Exact) or `MC` (Monte Carlo). Default: `MC`.
 *   `-e`: Electrostatic method. Default: `TK`.
 *   `-plot`: Generate plot (`yes` or `no`). Default: `yes`.
+*   `-aref`: Reference Max SASA set (`header` or `mdtraj`). `header` uses legacy values. `mdtraj` uses theoretical values for Bondi radii (Tien et al. 2013). Default: `header`.
 
 ### Output
 
