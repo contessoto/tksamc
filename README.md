@@ -25,35 +25,48 @@ Install dependencies:
 pip install numpy scipy matplotlib mdtraj numba
 ```
 
-Or install the package directly:
+## Installation
+
+You can install the package using pip:
 
 ```bash
 pip install .
 ```
 
+This will make the `tksamc` command available in your terminal.
+
 ## Usage
 
-### Main Calculation
+### Method 1: Installed Package
 
-Run the installed `tksamc` command with your PDB file:
+Run the `tksamc` command:
 
 ```bash
-tksamc -f <pdb_file> -ph <pH_value> -T <Temperature> -s <Method>
+tksamc -f sample_pdb_1ubq.pdb -ph 7.0 -T 300.0 -s MC
 ```
 
-Arguments:
+### Method 2: Running Locally (No Install)
+
+If you prefer not to install the package (e.g., for development or testing), you can use the `run_local.py` script provided in the root directory:
+
+```bash
+python3 run_local.py -f sample_pdb_1ubq.pdb -ph 7.0 -T 300.0 -s MC
+```
+
+Alternatively, run as a module:
+
+```bash
+python3 -m tksamc.cli -f sample_pdb_1ubq.pdb -ph 7.0 -T 300.0 -s MC
+```
+
+### Arguments
+
 *   `-f`: Input PDB file.
 *   `-ph`: pH value (default: 7.0).
 *   `-T`: Temperature in Kelvin (default: 300.0).
 *   `-s`: Solver method. Choices: `EX` (Exact) or `MC` (Monte Carlo). Default: `MC`.
 *   `-e`: Electrostatic method. Default: `TK`.
 *   `-plot`: Generate plot (`yes` or `no`). Default: `yes`.
-
-Example:
-
-```bash
-tksamc -f sample_pdb_1ubq.pdb -ph 7.0 -T 300.0 -s MC
-```
 
 ### Output
 
