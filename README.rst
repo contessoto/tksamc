@@ -4,7 +4,7 @@ TKSA-MC
 |Citing-TKSA| |PyPI| |Python| |License| |GitHub-Stars|
 
 .. |Citing-TKSA| image:: https://img.shields.io/badge/cite-TKSA--MC-informational
-   :target: https://doi.org/10.1101/221556
+   :target: https://doi.org/10.1002/prot.25599
 
 .. |PyPI| image:: https://img.shields.io/pypi/v/tksamc.svg
    :target: https://pypi.org/project/tksamc/
@@ -18,6 +18,8 @@ TKSA-MC
 .. |GitHub-Stars| image:: https://img.shields.io/github/stars/contessoto/tksamc.svg?style=social
    :target: https://github.com/contessoto/tksamc
 
+
+   
 `GitHub <https://github.com/contessoto/tksamc>`__
 | `PyPI <https://pypi.org/project/tksamc/>`__
 | `Issues <https://github.com/contessoto/tksamc/issues>`__
