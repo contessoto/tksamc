@@ -103,7 +103,7 @@ def main():
        traj = md.load(file_pdb_name)
        # Calculate SASA
        # mode='residue' returns area per residue
-       sasa_by_residue = md.shrake_rupley(traj, mode='residue')[0] * 100.0 # Convert nm^2 to Angstrom^2
+       sasa_by_residue = md.shrake_rupley(traj, mode='residue', probe_radius=0.01)[0] * 100.0 # Convert nm^2 to Angstrom^2
 
        # Select Reference Area List
        if arguments.arg_aref == 'mdtraj':
