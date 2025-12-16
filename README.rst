@@ -13,7 +13,7 @@ TKSA-MC
    :target: https://pypi.org/project/tksamc/
 
 .. |License| image:: https://img.shields.io/github/license/contessoto/tksamc.svg
-   :target: https://github.com/contessoto/tksamc/blob/main/LICENSE
+   :target: https://github.com/contessoto/tksamc/blob/master/LICENSE
 
 .. |GitHub-Stars| image:: https://img.shields.io/github/stars/contessoto/tksamc.svg?style=social
    :target: https://github.com/contessoto/tksamc
