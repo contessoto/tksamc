@@ -55,7 +55,21 @@ Install dependencies:
 Installation
 ============
 
-You can install the package using pip:
+The **TKSA-MC** library can be installed via pip from PyPI or directly from source.
+
+Install via pip
+---------------
+
+The easiest way to install **TKSA-MC** is from PyPI:
+
+.. code-block:: bash
+
+    pip install tksamc
+
+Install from Source
+-------------------
+
+You can also install the package locally from the source directory:
 
 .. code-block:: bash
 
@@ -111,4 +125,4 @@ References
 ==========
 
     "TKSA-MC: A Web Server for rational mutation through the optimization of protein charge interactions -
-    Vinícius G Contessoto, Vinícius M de Oliveira, Bruno R Fernandes, Gabriel G Slade, Vitor B. P. Leite, bioRxiv 221556; doi: [https://doi.org/10.1101/221556](https://doi.org/10.1101/221556)"
+    Vinícius G Contessoto, Vinícius M de Oliveira, Bruno R Fernandes, Gabriel G Slade, Vitor B. P. Leite, bioRxiv 221556; doi: https://doi.org/10.1101/221556"
