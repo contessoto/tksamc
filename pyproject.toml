@@ -1,6 +1,36 @@
 [build-system]
-requires = ["setuptools>=42", "wheel"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
 [project]
 name = "tksamc"
 version = "1.0.1"
+description = "TKSA - Electrostatic Free Energy calculation for each ionizable residue"
+readme = "README.md"
+authors = [
+  { name = "Vinícius G. Contessoto" },
+]
+requires-python = ">=3.6"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Chemistry",
+]
+dependencies = [
+    "numpy",
+    "scipy",
+    "matplotlib",
+    "mdtraj",
+    "numba",
+]
+
+[project.scripts]
+tksamc = "tksamc.cli:main"
+
+[project.urls]
+"Homepage" = "https://github.com/contessoto/tksamc"
+
+[tool.setuptools]
+packages = ["tksamc"]
