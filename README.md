@@ -1,14 +1,42 @@
-# TKSA-MC (Python 3)
+TKSA-MC
+=======
 
-**Tanford-Kirkwood Surface Accessibility - Monte Carlo**
+|Citing-TKSA| |PyPI| |Python| |License| |GitHub-Stars|
 
-This software calculates protein charge-charge interactions via the Tanford-Kirkwood Surface Accessibility model, using either an Exact method (for small systems) or Monte Carlo sampling (for larger systems) to determine protonation states and electrostatic free energies.
+.. |Citing-TKSA| image:: https://img.shields.io/badge/cite-TKSA--MC-informational
+   :target: https://doi.org/10.1101/221556
 
-## Description
+.. |PyPI| image:: https://img.shields.io/pypi/v/tksamc.svg
+   :target: https://pypi.org/project/tksamc/
 
-This is a Python 3 port of the original TKSA-MC code. It uses `mdtraj` for structure parsing and SASA calculation, and `numpy`/`numba` for efficient computation of electrostatic energies.
+.. |Python| image:: https://img.shields.io/pypi/pyversions/tksamc.svg
+   :target: https://pypi.org/project/tksamc/
 
-The method calculates the electrostatic free energy contribution ($\Delta G_{qq}$) for each ionizable residue.
+.. |License| image:: https://img.shields.io/github/license/contessoto/tksamc.svg
+   :target: https://github.com/contessoto/tksamc/blob/main/LICENSE
+
+.. |GitHub-Stars| image:: https://img.shields.io/github/stars/contessoto/tksamc.svg?style=social
+   :target: https://github.com/contessoto/tksamc
+
+`GitHub <https://github.com/contessoto/tksamc>`__
+| `PyPI <https://pypi.org/project/tksamc/>`__
+| `Issues <https://github.com/contessoto/tksamc/issues>`__
+
+Overview
+========
+
+**TKSA-MC** (Tanford–Kirkwood Surface Accessibility – Monte Carlo) is a Python 3 implementation of the
+Tanford–Kirkwood electrostatic model for proteins. The code computes charge–charge interaction free
+energies by explicitly sampling protonation states, using either an **exact solver** (for small systems)
+or **Monte Carlo sampling** (for large proteins).
+
+The method estimates the electrostatic free energy contribution,  
+:math:`\Delta G_{qq}`, for each ionizable residue, accounting for solvent accessibility via
+solvent-accessible surface area (SASA).
+
+TKSA-MC is designed to be **simple, fast, and reproducible**, with support for command-line execution
+and scripting workflows.
+
 
 ## Requirements
 
