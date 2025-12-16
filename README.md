@@ -74,23 +74,6 @@ python3 -m tksamc.cli -f sample_pdb_1ubq.pdb -ph 7.0 -T 300.0 -s MC
 *   **CSV File**: A CSV file (e.g., `Output_MC_sample_pdb_1ubq_pH_7.0_T_300.0.csv`) containing detailed results for each charged residue, including coordinates, pKa, SASA, Charge, and $\Delta G_{qq}$.
 *   **Plot**: A JPG plot (e.g., `Fig_MC_sample_pdb_1ubq_pH_7.0_T_300.0.jpg`) showing the electrostatic free energy per residue. Red bars indicate positive values (unfavorable), and blue bars indicate negative values (favorable).
 
-## Publishing
-
-To publish this package to PyPI:
-
-1.  **Build the package**:
-    ```bash
-    pip install build
-    python -m build
-    ```
-    This will create `dist/tksamc-1.0.0-py3-none-any.whl` and `dist/tksamc-1.0.0.tar.gz`.
-
-2.  **Upload to PyPI**:
-    ```bash
-    pip install twine
-    twine upload dist/*
-    ```
-
 ## References
 
 > "TKSA-MC: A Web Server for rational mutation through the optimization of protein charge interactions -
