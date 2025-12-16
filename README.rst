@@ -3,20 +3,20 @@ TKSA-MC
 
 |Citing-TKSA| |PyPI| |Python| |License| |GitHub-Stars|
 
-.. |Citing-TKSA| image:: [https://img.shields.io/badge/cite-TKSA--MC-informational](https://img.shields.io/badge/cite-TKSA--MC-informational)
-   :target: [https://doi.org/10.1002/prot.25599](https://doi.org/10.1002/prot.25599)
+.. |Citing-TKSA| image:: https://img.shields.io/badge/cite-TKSA--MC-informational
+   :target: https://doi.org/10.1002/prot.25599
 
-.. |PyPI| image:: [https://img.shields.io/pypi/v/tksamc.svg](https://img.shields.io/pypi/v/tksamc.svg)
-   :target: [https://pypi.org/project/tksamc/](https://pypi.org/project/tksamc/)
+.. |PyPI| image:: https://img.shields.io/pypi/v/tksamc.svg
+   :target: https://pypi.org/project/tksamc/
 
-.. |Python| image:: [https://img.shields.io/pypi/pyversions/tksamc.svg](https://img.shields.io/pypi/pyversions/tksamc.svg)
-   :target: [https://pypi.org/project/tksamc/](https://pypi.org/project/tksamc/)
+.. |Python| image:: https://img.shields.io/pypi/pyversions/tksamc.svg
+   :target: https://pypi.org/project/tksamc/
 
-.. |License| image:: [https://img.shields.io/github/license/contessoto/tksamc.svg](https://img.shields.io/github/license/contessoto/tksamc.svg)
-   :target: [https://github.com/contessoto/tksamc/blob/main/LICENSE](https://github.com/contessoto/tksamc/blob/main/LICENSE)
+.. |License| image:: https://img.shields.io/github/license/contessoto/tksamc.svg
+   :target: https://github.com/contessoto/tksamc/blob/main/LICENSE
 
-.. |GitHub-Stars| image:: [https://img.shields.io/github/stars/contessoto/tksamc.svg?style=social](https://img.shields.io/github/stars/contessoto/tksamc.svg?style=social)
-   :target: [https://github.com/contessoto/tksamc](https://github.com/contessoto/tksamc)
+.. |GitHub-Stars| image:: https://img.shields.io/github/stars/contessoto/tksamc.svg?style=social
+   :target: https://github.com/contessoto/tksamc
 
 
 `GitHub <https://github.com/contessoto/tksamc>`__
