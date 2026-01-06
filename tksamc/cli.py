@@ -187,15 +187,14 @@ def main():
        # Block 2: `if residue_type in Charged_residues ...`: Add side chain charge.
        # This implies if residue 1 is LYS, it gets LYS charge but NOT N_T charge?
        # That seems chemically wrong (it should have both), but I must reproduce code behavior.
-       # Actually, `sample_pdb_1ubq.pdb` starts with MET (residue 1). MET is not charged.
-       # So it gets N_T.
-       # If it started with LYS, the original code would SKIP N_T check.
-       # This might be a bug in original code or intended simplified model.
-       # I will reproduce the logic: "If first residue AND not a charged type -> Add N_T".
+       #
+       # Fix: We now apply N-term charge to the first residue REGARDLESS of whether
+       # the residue itself is charged or not. This corrects the potential bug
+       # where a starting LYS would miss its N-term charge.
 
        is_first_residue = (residue.index == 0) # Assuming chain A starts at 0
 
-       if is_first_residue and res_name not in Charged_residues:
+       if is_first_residue:
            # Add N_T
            # We need coordinates of N atom
            n_atom = next((a for a in residue.atoms if a.name == 'N'), None)
